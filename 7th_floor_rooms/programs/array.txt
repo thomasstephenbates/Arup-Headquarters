@@ -1,0 +1,16 @@
+m_nIndex[0]=0
+m_nIndex[1]=1
+m_nIndex[2]=1
+m_nIndex[3]=2
+m_nIndex[4]=3
+m_nIndex[5]=4
+m_nIndex[6]=3
+m_nIndex[7]=3
+m_nIndex[8]=3
+m_nIndex[9]=3
+m_nIndex[10]=3
+m_nIndex[11]=3
+m_nIndex[12]=3
+m_nIndex[13]=3
+m_nIndex[14]=3
+m_nIndex[15]=3

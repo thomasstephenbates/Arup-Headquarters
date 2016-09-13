@@ -1,0 +1,438 @@
+[
+Version=1
+]
+[
+ObjTp=FSgntr
+Sgntr=UserMacro
+RelVrs=2.03.18
+IntStrVrs=2
+MinSMWVrs=0
+MinTIOVrs=0
+SavedBy=SMW2.03.18
+]
+[
+ObjTp=Hd
+S0Nd=1
+S1Nd=2
+SLNd=3
+PrNm=Tandberg 2500+6000 Telnet Processor v3.umc
+DbVr=15.9.0
+PgmNm=CRR
+DlrNm=Crestron Electronics
+CltNm=Tandberg 2500+6000 Telnet Processor
+Incl=167,168,216,225,248,249,266,302,305,362,378,380,405,407,408,409,478,522,537,554,586,590,
+McNm=Tandberg 2500+6000 Telnet Processor v3
+SmVr=207.001
+DvVr=207.001
+TpN1=1
+TpN2=2
+TpN3=3
+TpN4=4
+TpN5=5
+Cmn1=SIMPLWINDOWS NAME: Tandberg 2500+6000 Telnet Processor\\\\MANUFACTURER:
+Cmn2=||1Tandberg\\MODEL: 2500/6000\\\\CATEGORY: Codec\\\\VERSION: 1.0\\\\SUMMARY:
+Cmn3=||1Allows communications with a Tandberg 2500/6000 over TCP/IP\\\\\\GENERAL||1
+Cmn4=NOTES: This module enables a Crestron system to communicate\\with||1
+Cmn5=a Tandberg 2500/6000 over TCP/IP using a Telnet session. This module\\interprets||1
+Cmn6=and responds to some standard Telnet functions. It also allows\\the||1
+Cmn7=password that may be required for the Telnet session to be \\automatically||1
+Cmn8=sent while the connection is being established. The \\password should||1
+Cmn9=be entered into the Password parameter field.\\\\The inputs/outputs||1
+Cmn10=whch begin with TCP/IP_Client should be connected\\directly to the||1
+Cmn11=corresponding signals on the TCP/IP Client object. When\\it is desired||1
+Cmn12=to establish the connection with the Tandberg system, pulse\\the||1
+Cmn13=Connect input. The module will then wait for the connection to be\\established,||1
+Cmn14=will send the password if necessary, and will pulse the\\Connection_Complete||1
+Cmn15=output when the connection is fully established. \\The Connection_Complete||1
+Cmn16=output will typically be connected to the Initialize\\input of the||1
+Cmn17=Tandberg 2500+6000 Full Control module.\\\\When it is desired to||1
+Cmn18=end the session, pulse the Disconnect input.\\\\\\CRESTRON HARDWARE||1
+Cmn19=REQUIRED: CNXENET+, Any 2-Series processor with an ethernet port\\\\\\SETUP||1
+Cmn20=OF CRESTRON HARDWARE: \\\\Use Port #23D on the TCP/IP Client\\Make||1
+Cmn21=sure to set up the IP table of the Crestron system to point to the||1
+Cmn22=Tandberg system\\Also make sure that the correct Telnet password||1
+Cmn23=is entered into the parameter field\\\\VENDOR FIRMWARE: Tested with||1
+Cmn24=Software version E1.1\\\\\\VENDOR SETUP: Be sure to assign a valid||1
+Cmn25=IP address to the Tandberg\\\\\\CABLE NUMBER: None\\\\\\INPUT DESCRIPTIONS:
+Cmn26=||1\\\\Name                       Type Description\\From_TCP/IP_Client_Connect_F||1
+Cmn27=D  Connect to the corresponding output of the TCP/IP Client object\\From_TCP/IP_Client_Rx$||1
+Cmn28=||6S  Connect to the corresponding output of the TCP/IP Client||1
+Cmn29=object\\Connect                      D  Pulse when it is desired||1
+Cmn30=to establish the connection\\Disconnect                   D  Pulse||1
+Cmn31=when it is desired to end the connection\\Password||>
+Cmn32=||7P  Enter the password needed for the Telnet session (if any)\\\\\\OUTPUT||1
+Cmn33=DESCRIPTIONS: \\\\Name                     Type Description\\To_TCP/IP_Client_Connect||1
+Cmn34=||2D  Connect to the corresponding input of the TCP/IP Client object\\To_TCP/IP_Client_Tx$||1
+Cmn35=||6S  Connect to the corresponding input of the TCP/IP Client||1
+Cmn36=object\\Connection_Complete        D  Pulses when the connection||1
+Cmn37=has been completed\\\\\\OPS USED FOR TESTING: v3.029.cuz\\\\COMPILER||1
+Cmn38=USED FOR TESTING: SimplWindows Ver 2.03.18\\\\SAMPLE PROGRAM: Tandberg||1
+Cmn39=2500+6000 Full Control TCPIP Demo\\\\REVISION HISTORY: None\\
+]
+[
+ObjTp=Bk
+Nm1=\
+Sx1=0
+Sy1=0
+Mx1=0
+]
+[
+ObjTp=Symbol
+Name=Tandberg 2500+6000 Telnet Processor v3
+Code=1
+SmplCName=Tandberg 2500+6000 Telnet Processor v3.umc
+Smpl-C=3
+Convertable=True
+CompilerTimePrecision=Single_Or_Double_Precision
+Hint=Tandberg 2500+6000 Telnet Processor
+SMWRev=0
+TIORev=0
+HelpID=1055
+NumFixedInputs=5
+NumFixedOutputs=5
+NumFixedParams=1
+MinVariableInputs=0
+MinVariableInputsList2=0
+MinVariableInputsList3=0
+MinVariableOutputs=0
+MinVariableOutputsList2=0
+MinVariableOutputsList3=0
+MinVariableParams=0
+SymbolTree=20
+InputSigType1=Digital
+InputSigType2=Serial
+InputSigType3=Digital|Analog|Serial|String
+InputSigType4=Digital
+OutputSigType1=Digital
+OutputSigType2=Serial
+OutputSigType3=Digital|Analog|Serial|String
+OutputSigType4=Digital
+OutputSigType5=Digital|Analog|Serial|String
+ParamSigType1=Time|Percent|Constant|String|FileName|HexAddress|Any
+InputCue1=From_TCP/IP_Client_Connect_F
+InputCue2=From_TCP/IP_Client_Rx$
+InputCue3=[~UNUSED~]
+InputCue4=Connect
+InputCue5=Disconnect
+OutputCue1=To_TCP/IP_Client_Connect
+OutputCue2=To_TCP/IP_Client_Tx$
+OutputCue3=[~UNUSED~]
+OutputCue4=Connection_Complete
+OutputCue5=[~UNUSED~]
+ParamCue1=Password
+FileName=Tandberg 2500+6000 Telnet Processor v3.umc
+]
+[
+ObjTp=Sm
+H=1
+SmC=157
+Nm=Central Control Modules
+CF=2
+n1I=1
+n1O=1
+mI=1
+mO=1
+tO=1
+mP=1
+P1=
+]
+[
+ObjTp=Sm
+H=2
+SmC=157
+Nm=Network Modules
+CF=2
+n1I=1
+n1O=1
+mI=1
+mO=1
+tO=1
+mP=1
+P1=
+]
+[
+ObjTp=Sm
+H=3
+SmC=157
+Nm=Ethernet
+CF=2
+n1I=1
+n1O=1
+mI=1
+mO=1
+tO=1
+mP=1
+P1=
+]
+[
+ObjTp=Sm
+H=4
+SmC=156
+Nm=Logic
+CF=2
+mC=8
+C1=8
+C2=9
+C3=10
+C4=11
+C5=12
+C6=13
+C7=14
+C8=15
+]
+[
+ObjTp=Sm
+H=5
+SmC=157
+Nm=DefineArguments
+CF=2
+n1I=1
+n1O=1
+mC=1
+C1=6
+mI=1
+mO=1
+tO=1
+mP=1
+P1=
+]
+[
+ObjTp=Sm
+H=6
+SmC=55
+PrH=5
+CF=2
+n1I=5
+n1O=5
+mI=5
+I1=19
+I2=21
+I3=5
+I4=6
+I5=22
+mO=5
+tO=5
+O1=20
+O2=18
+O3=5
+O4=4
+O5=5
+mP=1
+P1=Password
+]
+[
+ObjTp=Sm
+H=8
+SmC=12
+PrH=4
+CF=2
+n1I=2
+n1O=2
+Cmn1=Connect/Disconnect\\
+mI=2
+I1=6
+I2=22
+mO=2
+tO=2
+O1=20
+]
+[
+ObjTp=Sm
+H=9
+SmC=101
+PrH=4
+CF=2
+n1I=4
+n1O=4
+mI=4
+I1=21
+I3=8
+I4=9
+mO=4
+tO=4
+O1=18
+O2=10
+O3=11
+O4=9
+mP=6
+P1=
+P2=\[#Password\]\n
+P3=\xFF\xFC\x1F
+P4=Password:
+P5=OK
+P6=\xFF\xFD\x1F
+]
+[
+ObjTp=Sm
+H=10
+SmC=9
+PrH=4
+CF=2
+n1I=3
+n1O=2
+mI=3
+I1=10
+mO=2
+tO=2
+O1=12
+mP=1
+P1=.1s
+]
+[
+ObjTp=Sm
+H=11
+SmC=1
+PrH=4
+CF=2
+n1I=2
+n1O=1
+mI=2
+I1=19
+I2=12
+mO=1
+tO=1
+O1=8
+]
+[
+ObjTp=Sm
+H=12
+SmC=13
+PrH=4
+CF=2
+n1I=3
+n1O=2
+mI=3
+I2=14
+I3=19
+mO=2
+tO=2
+O1=14
+]
+[
+ObjTp=Sm
+H=13
+SmC=12
+PrH=4
+CF=2
+n1I=2
+n1O=2
+mI=2
+I1=14
+I2=4
+mO=2
+tO=2
+O1=16
+]
+[
+ObjTp=Sm
+H=14
+SmC=13
+PrH=4
+CF=2
+n1I=3
+n1O=2
+mI=3
+I2=17
+I3=11
+mO=2
+tO=2
+O1=17
+]
+[
+ObjTp=Sm
+H=15
+SmC=20
+PrH=4
+CF=2
+n1I=2
+n1O=1
+mI=2
+I1=16
+I2=17
+mO=1
+tO=1
+O1=4
+]
+[
+ObjTp=Sg
+H=4
+Nm=Connection_Complete
+]
+[
+ObjTp=Sg
+H=5
+Nm=[~UNUSED~]
+SgTp=31
+]
+[
+ObjTp=Sg
+H=6
+Nm=Connect
+]
+[
+ObjTp=Sg
+H=8
+Nm=Send_Password
+]
+[
+ObjTp=Sg
+H=9
+Nm=PING
+]
+[
+ObjTp=Sg
+H=10
+Nm=Password_In
+]
+[
+ObjTp=Sg
+H=11
+Nm=Ok_In
+]
+[
+ObjTp=Sg
+H=12
+Nm=Password_M
+]
+[
+ObjTp=Sg
+H=14
+Nm=Connect_T
+]
+[
+ObjTp=Sg
+H=16
+Nm=Waiting_For_Ok
+]
+[
+ObjTp=Sg
+H=17
+Nm=Ok_T
+]
+[
+ObjTp=Sg
+H=18
+Nm=To_TCP/IP_Client_Tx$
+SgTp=4
+]
+[
+ObjTp=Sg
+H=19
+Nm=From_TCP/IP_Client_Connect_F
+]
+[
+ObjTp=Sg
+H=20
+Nm=To_TCP/IP_Client_Connect
+]
+[
+ObjTp=Sg
+H=21
+Nm=From_TCP/IP_Client_Rx$
+SgTp=4
+]
+[
+ObjTp=Sg
+H=22
+Nm=Disconnect
+]

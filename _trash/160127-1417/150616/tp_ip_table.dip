@@ -1,0 +1,16 @@
+[IPTableAdvDIP]
+iptableadvdip.entrycount0="max_entries",252
+iptableadvdip.entrycount1="max_masters",252
+iptableadvdip.entrycount2="max_peers",0
+iptableadvdip.entrycount3="max_slaves",0
+iptableadvdip.fieldcount=8
+iptableadvdip.fielddata0=("2,2,+,+,+,+,-,"ip_id","cip_id""),3,254,0,2,+,+,-,-
+iptableadvdip.fielddata1=("6,32,+,+,-,+,+,"connection_type","type""),0,0,1,6,-,+,-,-
+iptableadvdip.fielddata2=("7,64,+,+,+,+,+,"status","status""),0,0,2,6,-,+,-,-
+iptableadvdip.fielddata3=("5,16,+,+,-,+,-,"dev_id","devid""),3,254,3,2,-,+,-,-
+iptableadvdip.fielddata4=("4,8,+,+,-,+,+,"port","port""),4000,65535,4,1,-,+,-,-
+iptableadvdip.fielddata5=("3,4,+,+,+,+,-,"address","ip address""),0,32,5,5,-,+,-,-
+iptableadvdip.fielddata6=("1,1,+,+,-,-,-,"entry_type","entry type""),0,0,6,6,-,+,-,-
+iptableadvdip.fielddata7=("8,128,+,-,-,-,+,"fixed","fixed""),0,0,7,3,-,-,-,-
+iptableadvdip.entry0=3,"gway","offline",0,41794,"10.162.63.5","master",-
+

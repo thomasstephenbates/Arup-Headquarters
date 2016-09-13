@@ -1,0 +1,96 @@
+[BEGIN]
+  Version=1
+[END]
+[BEGIN]
+  ObjTp=FSgntr
+  Sgntr=UserSPlus
+  RelVrs=1
+  IntStrVrs=1
+  SPlusVrs=3.03.14
+  InclDatVrs=2.08.46
+  CrossCplrVrs=1.3
+[END]
+[BEGIN]
+  ObjTp=Symbol
+  Exclusions=1,19,20,21,88,89,167,168,179,213,214,215,216,217,225,226,248,249,266,267,310,718,756,854,
+  Name=Tandberg Video Switch Control via MXP
+  SmplCName=TVS Control via MXP.usp
+  Code=1
+  InputCue1=Video_Input[1]
+  InputSigType1=Digital
+  InputCue2=Video_Input[2]
+  InputSigType2=Digital
+  InputCue3=Video_Input[3]
+  InputSigType3=Digital
+  InputCue4=Video_Input[4]
+  InputSigType4=Digital
+  InputCue5=Video_Input[5]
+  InputSigType5=Digital
+  InputCue6=Select_Camera[#]
+  InputSigType6=Digital
+  OutputCue1=TVS_is_Connected
+  OutputSigType1=Digital
+  OutputCue2=TVS_not_Connected
+  OutputSigType2=Digital
+  OutputCue3=Camera_Selected[1]
+  OutputSigType3=Digital
+  OutputCue4=Camera_Selected[2]
+  OutputSigType4=Digital
+  OutputCue5=Camera_Selected[3]
+  OutputSigType5=Digital
+  OutputCue6=Camera_Selected[4]
+  OutputSigType6=Digital
+  OutputCue7=Camera_Enabled[#]
+  OutputSigType7=Digital
+  InputList2Cue1=From_Device
+  InputList2SigType1=Serial
+  OutputList2Cue1=Camera_Number_High
+  OutputList2SigType1=Analog
+  OutputList2Cue2=Camera_Number_Low
+  OutputList2SigType2=Analog
+  OutputList2Cue3=To_Device
+  OutputList2SigType3=Serial
+  OutputList2Cue4=Camera_Type[#]
+  OutputList2SigType4=Serial
+  ParamCue1=[Reference Name]
+  MinVariableInputs=6
+  MaxVariableInputs=9
+  MinVariableInputsList2=1
+  MaxVariableInputsList2=1
+  MinVariableOutputs=7
+  MaxVariableOutputs=19
+  MinVariableOutputsList2=4
+  MaxVariableOutputsList2=16
+  MinVariableParams=0
+  MaxVariableParams=0
+  Expand=expand_separately
+  Expand2=expand_separately
+  ProgramTree=Logic
+  SymbolTree=32
+  Hint=
+  PdfHelp=
+  HelpID= 
+  Render=4
+  Smpl-C=16
+  CompilerCode=-48
+  CompilerParamCode=27
+  CompilerParamCode5=14
+  NumFixedParams=1
+  Pp1=1
+  MPp=1
+  NVStorage=10
+  ParamSigType1=String
+  SmplCInputCue1=o#
+  SmplCOutputCue1=i#
+  SmplCInputList2Cue1=an#
+  SmplCOutputList2Cue1=ai#
+  SPlus2CompiledName=S2_TVS_Control_via_MXP
+  SymJam=NonExclusive
+  FileName=TVS Control via MXP.ush
+[END]
+[BEGIN]
+  ObjTp=Dp
+  H=1
+  Tp=1
+  NoS=False
+[END]

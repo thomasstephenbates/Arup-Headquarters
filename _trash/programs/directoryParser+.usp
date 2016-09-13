@@ -1,0 +1,526 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name:BBI Engineering
+System Name:Macromedia
+System Number:
+Programmer:Sasha Harris-Cronin
+Comments:
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+*******************************************************************************************/
+#SYMBOL_NAME "Directory Parser +"
+// #HINT ""
+// #DEFINE_CONSTANT
+// #CATEGORY "" 
+#CATEGORY "20" // Conferencing
+#DEFAULT_VOLATILE
+// #DEFAULT_NONVOLATILE
+#ENABLE_STACK_CHECKING
+/*
+#HELP_BEGIN
+   (add additional lines of help lines)
+#HELP_END
+*/
+
+/*******************************************************************************************
+  Include Libraries
+  (Uncomment and include additional librarys as needed)
+*******************************************************************************************/
+// #CRESTRON_LIBRARY ""
+// #USER_LIBRARY ""
+
+/*******************************************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+*******************************************************************************************/
+DIGITAL_INPUT build_directory, site_up, site_dn, room_up, room_dn,select_site[8],select_room[8];
+ANALOG_INPUT site_list_len, room_list_len;
+STRING_INPUT all_list_name[255], file_name[255], lookup[5][255];
+// BUFFER_INPUT 
+
+DIGITAL_OUTPUT site_list_top, site_list_bottom, room_list_top, room_list_bottom, select_site_fb[8],select_room_fb[8];
+// ANALOG_OUTPUT 
+STRING_OUTPUT cur_site,cur_room,cur_number, cur_speed, site_index, room_index, site[8], room[8], lookup_fb[5];
+
+/*******************************************************************************************
+  Structure Definitions
+  (Uncomment and define structure definitions as needed)
+  Note:  Be sure to initialize all declared STRING variables as needed
+         For example, in Function Main: struct.myString = "";
+*******************************************************************************************/
+STRUCTURE DirEntry
+{
+	STRING site[255];
+	STRING room[255];
+	STRING number[255];
+	STRING speed[255];
+};
+
+DirEntry directory[1024];
+DirEntry roomDirectory[255];
+
+/*******************************************************************************************
+  Global Variables
+  (Uncomment and declare global variables as needed)
+  Note:  Be sure to initialize all declared STRING variables as needed
+         For example, in Function Main: myString = "";
+*******************************************************************************************/
+VOLATILE INTEGER curSiteTop, curRoomTop, curSiteIndex, curRoomIndex, siteListLen, roomListLen;
+VOLATILE STRING curSite[255], curRoom[255], curNumber[255], curSpeed[255];
+VOLATILE STRING siteDirectory[1024][500], allListName[255], fileName[255];
+VOLATILE INTEGER siteDirectoryLen, directoryLen, roomDirectoryLen;
+VOLATILE SIGNED_INTEGER fileHandle;
+VOLATILE INTEGER fileTimedOut;
+/*******************************************************************************************
+  Functions
+  (Add any additional functions here)
+  Note:  Functions must be physically placed before the location in
+         the code that calls them.
+*******************************************************************************************/
+Function ReportError(SIGNED_INTEGER handle)
+{
+	STRING ErrMsg$[255];
+	
+	switch (handle)
+	{
+		case (FILE_NO_DISK): ErrMsg$ = "Disk is removed!";
+		case (FILE_LONGPATH): ErrMsg$ = "Filename is too long!";
+		case (FILE_INVNAME): ErrMsg$ = "Filename includes invalid character!";
+		case (FILE_PEMFILE): ErrMsg$ = "Too many files open!";
+		case (FILE_BADFILE): ErrMsg$ = "Invalid file descriptor!";
+		case (FILE_ACCES): ErrMsg$ = "Attempted to open a readonly file or a directory!";
+		case (FILE_NOSPC): ErrMsg$ = "Disk is full!";
+		case (FILE_SHARE): ErrMsg$ = "File access conflict!";
+		case (FILE_NOFILE): ErrMsg$ = "File not found!";
+		case (FILE_MAXFILE_SIZE): ErrMsg$ = "Maximum file size exceeded!";
+		case (FILE_NO_MEMORY): ErrMsg$ = "Run out of internal memory!";
+		default: MakeString(ErrMsg$, "Miscellaneous error: %d", handle);
+	}
+	PRINT ("%s\n", ErrMsg$);
+}
+
+Function addToDirectory(STRING tempEntry) //passed line from CSV file
+{
+	STRING tempStr[255];
+	INTEGER i;
+	INTEGER addFlag;
+	
+	//format is "siteName,roomName,number$0D$0A"
+	directoryLen = directoryLen + 1;  //current directory length
+  //site
+	tempStr = REMOVE(",",tempEntry);
+	tempStr = LEFT(tempStr, LEN(tempStr) -1);
+	directory[directoryLen].site =  tempStr;
+	//room
+	tempStr = REMOVE(",",tempEntry);
+	tempStr = LEFT(tempStr, LEN(tempStr) -1);
+	directory[directoryLen].room =  tempStr;
+	//number
+  tempStr = REMOVE(",",tempEntry);
+	tempStr = LEFT(tempStr, LEN(tempStr) -1);
+	directory[directoryLen].number =  tempStr;
+  //speed
+  tempStr = LEFT(tempEntry, LEN(tempEntry));
+  directory[directoryLen].speed = tempStr;
+
+  
+  
+  //checking if site is new and addign it to site name list if it is
+  addFlag = 1;
+  
+  FOR (i = 0 to siteDirectoryLen)
+  {
+  	IF (siteDirectory[i] = directory[directoryLen].site) 
+  	{
+  		addFlag = 0;
+  		BREAK;
+  	}
+  }
+  IF (addFlag = 1)
+  {
+  	siteDirectoryLen = siteDirectoryLen + 1; //current siteDirectory length
+  	siteDirectory[siteDirectoryLen] = directory[directoryLen].site;
+  }
+  		
+}
+
+
+
+
+
+//test if the lists are at their tops or bottoms.
+Function testForLimits()
+{
+	IF (curSiteTop = 0) site_list_top = 1;
+	ELSE site_list_top = 0;
+	
+	IF (curRoomTop <= 1) room_list_top = 1;
+	ELSE room_list_top = 0;
+	
+	IF (((curSiteTop + siteListLen) - 1) >= siteDirectoryLen) site_list_bottom = 1;
+	ELSE site_list_bottom = 0;
+	
+	IF (((curRoomTop + roomListLen) - 1) >= roomDirectoryLen) room_list_bottom = 1;
+	ELSE room_list_bottom = 0;
+}
+
+Function selectRoom (INTEGER whichRoom) //user press on UI
+{
+	//whichRoom is which on the UI list
+	//curRoomTop is which room is at top of list
+	if (((whichRoom + curRoomTop) - 1) <= roomDirectoryLen)
+	{
+		PULSE (50, select_room_fb[whichRoom]);
+		curRoomIndex = whichRoom + curRoomTop - 1;
+		curRoom = roomDirectory[curRoomIndex].room;
+		curNumber = roomDirectory[curRoomIndex].number;
+		curSpeed = roomDirectory[curRoomIndex].speed;
+		cur_site = curSite;
+		cur_room = curRoom;
+		cur_number = curNumber;
+		cur_speed = curSpeed;
+		room_index = "Room " + ITOA(curRoomIndex) + " of " + ITOA(roomDirectoryLen);
+		testForLimits();
+	}
+}
+
+//redraw list of rooms 
+//index is start of list in roomDirectory.
+Function redrawRooms (INTEGER index)
+{
+	INTEGER i;
+	INTEGER roomNameIndex;
+	
+	FOR (i = 1 to room_list_len)
+	{
+		roomNameIndex = (index + i)-1; //current index in full roomDirectory
+		IF ((roomNameIndex <= roomDirectoryLen)&& (LEN(roomDirectory[roomNameIndex].room)))
+		{
+			room[i] = roomDirectory[roomNameIndex].room;
+		}
+		else room[i] = ""; //clear it
+	}
+	testForLimits();
+}
+
+
+
+Function selectSite (INTEGER whichSite)
+{
+	
+	//whichSite is which on the UI list
+	INTEGER i;
+	
+	//reload room list
+	//curSiteTop is which room is at top of list
+	if (((whichSite + curSiteTop) - 1) <= siteDirectoryLen)
+	{ 
+		PULSE (50, select_site_fb[whichSite]);
+		curSiteIndex = (whichSite + curSiteTop) - 1;
+		curSite = siteDirectory[curSiteIndex];
+		roomDirectoryLen = 0;
+		site_index = "Site " + ITOA(curSiteIndex) + " of " + ITOA(siteDirectoryLen);
+		FOR (i = 1 to directoryLen)
+		{
+			IF (curSiteIndex) //specific site
+			{
+				if (directory[i].site = curSite)
+				{
+					roomDirectoryLen = roomDirectoryLen + 1;
+					roomDirectory[roomDirectoryLen].site = directory[i].site;
+					roomDirectory[roomDirectoryLen].room = directory[i].room;
+					roomDirectory[roomDirectoryLen].number = directory[i].number;
+					roomDirectory[roomDirectoryLen].speed = directory[i].speed;
+
+				}
+			}
+			ELSE //zero index is all rooms
+			{
+				roomDirectoryLen = roomDirectoryLen + 1;
+				roomDirectory[roomDirectoryLen].site = directory[i].site;
+				roomDirectory[roomDirectoryLen].room = directory[i].room;
+				roomDirectory[roomDirectoryLen].number = directory[i].number;
+				roomDirectory[roomDirectoryLen].speed = directory[i].speed;
+			}				
+		}
+			
+		
+		curRoomTop = 1;
+		redrawRooms(1); //always default to first room when change sites
+		selectRoom(1); //select first room
+		testForLimits();
+	}
+}
+
+
+	
+   
+//redraw list of sites   
+//index is start of list in siteDirectory list
+Function redrawSites (INTEGER index)
+{
+	INTEGER i;
+	INTEGER siteDirectoryIndex;
+	FOR (i = 1 to site_list_len)
+	{
+		siteDirectoryIndex = (index + i)-1;
+			
+		if (LEN(siteDirectory[siteDirectoryIndex])) site[i] = siteDirectory[siteDirectoryIndex];
+		else site[i] = "";
+	}
+	testForLimits();
+}
+ 
+
+	
+Function initDirectory() //start at all sites, first room
+{
+	curSiteTop = 0;
+	redrawSites(curSiteTop);
+	wait (300)
+	{
+		selectSite(1);
+		testForLimits();
+	}
+}
+
+Function buildDirectory()
+{
+ 	FILE_INFO fileInfo;
+ 	STRING testString[255];
+ 	INTEGER errorCode;
+ 	STRING tempBuf[2];
+ 	STRING tempEntry[1024];
+ 	STRING removeCR[2];
+ 	STRING tempFileName[255];
+	siteDirectoryLen = 0;
+	roomDirectoryLen = 0;
+	directoryLen = 0;
+	tempFileName = "\\CF0\\" + fileName;
+	fileTimedOut = 0;
+
+	StartFileOperations();
+	IF (FindFirst(tempFileName, fileInfo ) = 0)
+	{
+		print ("found file\n");
+		tempEntry = "";
+    tempBuf = "";
+		findClose();
+		fileHandle = fileOpen(tempFileName, _O_RDONLY);
+		if (fileHandle s< 0) ReportError(fileHandle);
+    print ("opening file\n");
+		DO 
+		{
+			wait (3000, fileCloseWait)
+			{
+				PRINT ("timeout\n");
+				fileTimedOut = 1;
+			}
+			fileRead(fileHandle, tempBuf, 1); //read byte by byte
+			if (fileHandle s< 0) 
+			{
+				ReportError(fileHandle);
+				BREAK;
+			}
+      if (find("\x0D",tempBuf) = 0) //end of line
+      {
+      	tempEntry = tempEntry + tempBuf; //accumulate line
+      }
+      else
+      {
+       	removeCR = REMOVE ("\x0A", tempEntry); //remove any unwanted CR or LF
+      	removeCR = REMOVE ("\x0D", tempEntry);
+      	//print("read: %s\n",tempEntry);
+      	addToDirectory(tempEntry); //pass line to be added to directory
+      	//print("next line\n");
+      	tempEntry = "";
+      	tempBuf = "";
+      }      	
+    }  UNTIL ((FileEOF(fileHandle) = 1) | (fileTimedOut = 1));
+    if (fileHandle s< 0) 
+    {
+    	reportError(fileHandle);
+    }
+    //print ("this is the end\n");
+  }  
+  ELSE 
+  {
+  	print ("didn't find file\n");
+  	findClose();
+  }
+  fileClose(fileHandle);
+  print ("closed file\n");
+  EndFileOperations();
+  cancelWait(fileCloseWait);
+  siteDirectory[0] = allListName;
+  print ("directory length = %d\n",directoryLen);
+  initDirectory();
+}
+
+	
+/*
+Integer_Function MyIntFunction1()
+{
+    // TODO:  Add local variable declarations here
+
+    // TODO:  Add code here
+
+    Return (0);
+}
+*/
+
+
+String_Function getName(STRING lookupNum)
+{
+ 	INTEGER found;
+ 	INTEGER i;
+ 	STRING tempRoom[255];
+ 	
+ 	found = 0;
+ 	FOR (i = 1 to directoryLen)
+	{
+    IF (directory[i].number = lookupNum)
+    {
+    	found = 1;
+    	tempRoom = directory[i].room;
+    	Return (tempRoom);
+    	BREAK;
+    }
+  }
+  IF (found = 0) 
+  {
+  	Return (lookupNum);
+  }
+  
+}
+
+
+/*******************************************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+*******************************************************************************************/
+
+PUSH BUILD_DIRECTORY
+{
+		print ("building...\n");
+    buildDirectory();
+}
+
+
+PUSH site_up
+{
+	if (!(site_list_top)) 
+	{
+		curSiteTop = curSiteTop - 1;
+		redrawSites(curSiteTop);
+	}
+}
+
+PUSH site_dn
+{
+	if (!(site_list_bottom)) 
+	{
+		curSiteTop = curSiteTop + 1;
+		redrawSites(curSiteTop);
+	}
+}
+
+PUSH room_up
+{
+	if (!(room_list_top))
+	{
+		curRoomTop = curRoomTop - 1;
+		redrawRooms(curRoomTop);
+	}
+}
+
+PUSH room_dn
+{
+	if (!(room_list_bottom))
+	{
+		curRoomTop = curRoomTop + 1;
+		redrawRooms(curRoomTop);
+	}
+}
+
+PUSH select_site //on UI
+{
+	selectSite(getLastModifiedArrayIndex());
+
+}
+
+PUSH select_room //on UI
+{
+	selectRoom(getLastModifiedArrayIndex());
+
+}
+/*
+RELEASE input
+{
+    // TODO:  Add code here
+}
+*/
+
+
+CHANGE site_list_len //lenght of site list on UI
+{
+  siteListLen = site_list_len;
+}
+ 
+CHANGE room_list_len //lenght of site list on UI
+{
+  roomListLen = room_list_len;
+}
+
+CHANGE all_list_name //whatever name for list of all rooms
+{
+	allListName = all_list_name;
+} 
+
+CHANGE file_name //file to parse
+{
+	fileName = file_name;
+}
+
+CHANGE lookup
+{
+	INTEGER whichLookup;
+	STRING tempLookup[255];
+	
+	whichLookup = getLastModifiedArrayIndex();
+	tempLookup = lookup[whichLookup];
+  lookup_fb[whichLookup] = getName(tempLookup);
+}
+
+/*
+EVENT
+{
+    // TODO:  Add code here
+}
+*/
+
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+/*
+Function Main()
+{
+    WaitForInitializationComplete();
+    // If you are reading any Input or Output variables, uncomment
+    //   the WaitForInitializationComplete statement above and read
+    //   them afterwards.  Input/Output variables will not have
+    //   their correct values set until after the logic processor
+    //   runs and propagates the values to them.
+    
+    initDirectory();
+}
+ */
+

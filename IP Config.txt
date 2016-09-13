@@ -1,0 +1,65 @@
+VC: use 10.162.44.3
+
+SN: 255.255.192.0
+GW: 10.162.59.1
+
+10.162.63.1 - .20 is reserved for SF VC Management
+
+Boardroom
+Crestron - 10.162.63.1
+TP - 10.162.63.2
+Biamp - 10.162.63.3
+
+Crestron WAP -
+SSID: Crestron-13032f
+Key: 1978644942
+
+To connect TP to WAP...
+1. In setup go to adapters/wireless
+2. Search for wireless gateways and choose the Crestron one
+3. Enter in Key.  Also written on front of gateway under the table.
+
+Medium
+Crestron - 10.162.63.5
+TP Gateway - 10.162.63.6
+Biamp - 10.162.63.7
+TP Upload - 10.162.63.8
+
+Large
+Crestron - 10.162.63.9
+TP Gateway - 10.162.63.10
+Biamp - 10.162.63.11
+TP Upload - 10.162.63.12
+
+Sunset:
+Crestron: 10.162.63.31
+TP Wireless: 10.162.63.34
+DM: 10.162.63.36
+
+
+Luis Madrigal
+X
+Reality Room
+Crestron - 10.162.63.13
+TP Gateway - 10.162.63.14
+TP Upload - 10.162.63.15
+BSS 120 - 10.162.63.17
+BSS 160 - 10.162.63.18
+
+
+
+Extron - 800-633-9876
+
+
+global\oapsf
+oapsf
+
+firmware update
+wifi hotfix 1.0.2
+
+VC in Northwest corner
+10.162.44.2
+pwd: CONVIDEO1
+
+lcd webpage: http://10.162.63.9/arup_lobby_lcd.html
+naming webpage: http://10.162.63.13/arup_naming_xpanel.html

@@ -1,0 +1,26 @@
+Calling ProjMgr.CompileTargets() for Z:\Documents\work\ARUP\Crestron\programs\TVS Control via MXP.usp
+Returned from ProjMgr.CompileTargets() for <Z:\Documents\work\ARUP\Crestron\programs\TVS Control via MXP.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for Z:\Documents\work\ARUP\Crestron\programs\KeyProA.usp
+Returned from ProjMgr.CompileTargets() for <Z:\Documents\work\ARUP\Crestron\programs\KeyProA.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for Z:\Documents\work\ARUP\Crestron\programs\Tandberg MXP Processor v1.usp
+Returned from ProjMgr.CompileTargets() for <Z:\Documents\work\ARUP\Crestron\programs\Tandberg MXP Processor v1.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for Z:\Documents\work\ARUP\Crestron\programs\xacli Control (Rev-0-00-2).usp
+Returned from ProjMgr.CompileTargets() for <Z:\Documents\work\ARUP\Crestron\programs\xacli Control (Rev-0-00-2).usp>: Result: 0
+Calling ProjMgr.CompileTargets() for Z:\Documents\work\ARUP\Crestron\programs\BiAmp AudiaFlex Command Processor v7.0.usp
+Returned from ProjMgr.CompileTargets() for <Z:\Documents\work\ARUP\Crestron\programs\BiAmp AudiaFlex Command Processor v7.0.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for Z:\Documents\work\ARUP\Crestron\programs\Biamp Level Processor v7.0.usp
+Returned from ProjMgr.CompileTargets() for <Z:\Documents\work\ARUP\Crestron\programs\Biamp Level Processor v7.0.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for Z:\Documents\work\ARUP\Crestron\programs\Biamp On-Off Processor v7.0.usp
+Returned from ProjMgr.CompileTargets() for <Z:\Documents\work\ARUP\Crestron\programs\Biamp On-Off Processor v7.0.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for Z:\Documents\work\ARUP\Crestron\programs\Biamp AudiaFlex Dialer Processor v7.0.usp
+Returned from ProjMgr.CompileTargets() for <Z:\Documents\work\ARUP\Crestron\programs\Biamp AudiaFlex Dialer Processor v7.0.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for Z:\Documents\work\ARUP\Crestron\programs\Biamp AudiaFlex Dialer Processor v7.1.usp
+Returned from ProjMgr.CompileTargets() for <Z:\Documents\work\ARUP\Crestron\programs\Biamp AudiaFlex Dialer Processor v7.1.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for Z:\Documents\work\ARUP\Crestron\programs\PhoneBook.usp
+Returned from ProjMgr.CompileTargets() for <Z:\Documents\work\ARUP\Crestron\programs\PhoneBook.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for KeyProA.csp
+Returned from ProjMgr.CompileTargets() for <KeyProA.csp>: Result: 0
+Calling ProjMgr.CompileTargets() for Z:\Documents\work\ARUP\Crestron\programs\simpleTimer.usp
+Returned from ProjMgr.CompileTargets() for <Z:\Documents\work\ARUP\Crestron\programs\simpleTimer.usp>: Result: 0
+Calling ProjMgr.LinkTargets()...
+Returned from ProjMgr.LinkTargets(): Result: 0

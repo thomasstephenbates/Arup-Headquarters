@@ -1,0 +1,213 @@
+/***********************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+***********************************************************************************/
+/*
+Dealer Name:	Crestron Electronics
+System Name:
+System Number:
+Programmer:		PAC
+Comments:
+*/
+/***********************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+***********************************************************************************/
+#SYMBOL_NAME "Tandberg Video Switch Control via MXP"
+// #HINT ""
+#DEFINE_CONSTANT	ciHDOFFSET		0
+
+#DEFINE_CONSTANT	ciDISABLED		0
+#DEFINE_CONSTANT	ciENABLED			1
+
+#DEFINE_CONSTANT	csTYPENONE		"None"
+#DEFINE_CONSTANT	csTYPESWITCH	"Switch"
+#DEFINE_CONSTANT	csTYPEHD			"PrecisionHD"
+#DEFINE_CONSTANT	csTYPEWAVE2		"Wave2"
+#DEFINE_CONSTANT	csTYPEOTHER		"Other"
+// #CATEGORY "" 
+#DEFAULT_VOLATILE
+// #DEFAULT_NONVOLATILE
+/*
+#HELP_BEGIN
+   (add additional lines of help lines)
+#HELP_END
+*/
+/***********************************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+***********************************************************************************/
+DIGITAL_INPUT	Video_Input[5], Select_Camera[4];
+// ANALOG_INPUT 
+// STRING_INPUT 
+BUFFER_INPUT	From_Device[1000];
+
+DIGITAL_OUTPUT	TVS_is_Connected, TVS_not_Connected, Camera_Selected[4],
+								Camera_Enabled[13];
+ANALOG_OUTPUT		Camera_Number_High, Camera_Number_Low;
+STRING_OUTPUT		To_Device;
+STRING_OUTPUT		Camera_Type[13];
+/***********************************************************************************
+  Global Variables
+  (Uncomment and declare global variables as needed)
+  Note:  Be sure to initialize all declared STRING variables as needed
+         For example, in Function Main: myString = "";
+***********************************************************************************/
+INTEGER	iNumber, iCameraEnabled[13], iCameraSelected, iTemp,
+				iTemp1, iTemp2, iTVSConnected, iFlag1, iInput, a;
+STRING	sTemp[250], sCameraType[13][50];
+/***********************************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+***********************************************************************************/
+PUSH Video_Input
+{
+	iTemp = getlastmodifiedarrayindex();
+	if((iTemp = 1) && (iTVSConnected = ciENABLED) && (iCameraEnabled[iTemp] = ciENABLED))
+	{
+		iNumber = iCameraSelected;
+		Camera_Number_High = (iNumber + ciHDOFFSET) / 10 + 0x30;
+		Camera_Number_Low = (iNumber + ciHDOFFSET) mod 10 + 0x30;
+	}
+	else
+	{
+		iNumber = iTemp;
+		Camera_Number_High = iNumber / 10 + 0x30;
+		Camera_Number_Low = iNumber mod 10 + 0x30;
+	}
+	iInput = itemp;
+}
+
+PUSH Select_Camera
+{
+	iTemp1 = getlastmodifiedarrayindex();
+	if(iCameraEnabled[iTemp1] = ciENABLED)
+	{
+		iNumber = iTemp1;
+		iCameraSelected = iNumber;
+		Camera_Number_High = (iNumber + ciHDOFFSET) / 10 + 0x30;
+		Camera_Number_Low = (iNumber + ciHDOFFSET) mod 10 + 0x30;
+		makestring(To_Device, "vidin 1\nxconfiguration switch source: %d\n", iNumber);
+	}
+}
+
+CHANGE From_Device
+{
+	if(iFlag1 = 0)
+	{
+		iFlag1 = 1;
+		while(1)
+		{
+			sTemp = gather("\x0D\x0A", From_Device);
+			if(find("*S SWITCH (CONNECTED=TRUE):", upper(sTemp)) > 0)
+			{
+				iTVSConnected = ciENABLED;
+				TVS_not_Connected = 0;
+				TVS_is_Connected = 1;
+			}
+			else if(find("*S SWITCH (CONNECTED=FALSE):", upper(sTemp)) > 0)
+			{
+				iTVSConnected = ciDISABLED;
+				TVS_is_Connected = 0;
+				TVS_not_Connected = 1;
+			}
+			else if(find("*S SWITCH INPUT:", upper(sTemp)) > 0)
+			{
+				iTemp2 = atoi(sTemp);
+				if((iTemp2 >= 1) && (iTemp2 <= 4))
+				{
+					iCameraSelected = iTemp2;
+					if(iInput = 1)
+					{
+						iNumber = iCameraSelected;
+						Camera_Number_High = (iNumber + ciHDOFFSET) / 10 + 0x30;
+						Camera_Number_Low = (iNumber + ciHDOFFSET) mod 10 + 0x30;
+						for(a = 1 to 4)
+						{
+							Camera_Selected[a] = 0;
+						}
+						Camera_Selected[iCameraSelected] = 1;
+					}
+				}
+			}
+			else if((find("*S CAMERA", upper(sTemp)) > 0) && (find("(CONNECTED=TRUE):", upper(sTemp)) > 0))
+			{
+				iTemp2 = atoi(sTemp);
+				if((iTemp2 >= 1) && (iTemp2 <= 13))
+				{
+					iCameraEnabled[iTemp2] = ciENABLED;
+					Camera_Enabled[iTemp2] = iCameraEnabled[iTemp2];
+				}
+			}
+			else if((find("*S CAMERA", upper(sTemp)) > 0) && (find("(CONNECTED=FALSE):", upper(sTemp)) > 0))
+			{
+				iTemp2 = atoi(sTemp);
+				if((iTemp2 >= 1) && (iTemp2 <= 13))
+				{
+					iCameraEnabled[iTemp2] = ciDISABLED;
+					Camera_Enabled[iTemp2] = iCameraEnabled[iTemp2];
+					sCameraType[iTemp2] = csTYPENONE;
+					Camera_Type[iTemp2] = sCameraType[iTemp2];
+				}
+			}
+			else if((find("*S CAMERA", upper(sTemp)) > 0) && (find("TYPE:", upper(sTemp)) > 0))
+			{
+				iTemp2 = atoi(sTemp);
+				if(find("SWITCH", upper(sTemp)) > 0)
+				{
+					if((iTemp2 >= 1) && (iTemp2 <= 13))
+					{
+						sCameraType[iTemp2] = csTYPESWITCH;
+						Camera_Type[iTemp2] = sCameraType[iTemp2];
+					}
+				}
+				else if(find("PRECISIONHD", upper(sTemp)) > 0)
+				{
+					if((iTemp2 >= 1) && (iTemp2 <= 13))
+					{
+						sCameraType[iTemp2] = csTYPEHD;
+						Camera_Type[iTemp2] = sCameraType[iTemp2];
+					}
+				}
+				else if(find("WAVE2", upper(sTemp)) > 0)
+				{
+					if((iTemp2 >= 1) && (iTemp2 <= 13))
+					{
+						sCameraType[iTemp2] = csTYPEWAVE2;
+						Camera_Type[iTemp2] = sCameraType[iTemp2];
+					}
+				}
+				else
+				{
+					if((iTemp2 >= 1) && (iTemp2 <= 13))
+					{
+						sCameraType[iTemp2] = csTYPEOTHER;
+						Camera_Type[iTemp2] = sCameraType[iTemp2];
+					}
+				}
+			}
+			sTemp = "";
+		}
+		iFlag1 = 0;
+	}
+}
+/***********************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+***********************************************************************************/
+Function Main()
+{
+	iTVSConnected = ciDISABLED;
+	for(a = 1 to 13)
+	{
+		sCameraType[a] = csTYPENONE;
+		Camera_Type[a] = sCameraType[a];
+		iCameraEnabled[a] = ciDISABLED;
+		Camera_Enabled[a] = iCameraEnabled[a];
+	}
+	iCameraSelected = 1;
+	iNumber = iCameraSelected;
+	Camera_Number_High = (iNumber + ciHDOFFSET) / 10 + 0x30;
+	Camera_Number_Low = (iNumber + ciHDOFFSET) mod 10 + 0x30;
+}

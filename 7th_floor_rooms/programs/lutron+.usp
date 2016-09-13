@@ -1,0 +1,176 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name:BBI Engineering
+System Name:
+System Number:
+Programmer: Sasha Harris-Cronin
+Comments:
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+*******************************************************************************************/
+// #SYMBOL_NAME "Lutron Preset+"
+// #HINT ""
+// #DEFINE_CONSTANT
+// #CATEGORY "" 
+#CATEGORY "6" // Lighting.
+#DEFAULT_VOLATILE
+//#DEFAULT_NONVOLATILE
+#ENABLE_STACK_CHECKING
+/*
+#HELP_BEGIN
+   (add additional lines of help lines)
+#HELP_END
+*/
+
+/*******************************************************************************************
+  Include Libraries
+  (Uncomment and include additional librarys as needed)
+*******************************************************************************************/
+// #CRESTRON_LIBRARY ""
+// #USER_LIBRARY ""
+
+/*******************************************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+*******************************************************************************************/
+//DIGITAL_INPUT
+//ANALOG_INPUT
+STRING_INPUT zone_init[3], lutron_rx[20];
+// BUFFER_INPUT 
+
+DIGITAL_OUTPUT scene_fb[17];
+// ANALOG_OUTPUT 
+// STRING_OUTPUTv
+
+/*******************************************************************************************
+  Structure Definitions
+  (Uncomment and define structure definitions as needed)
+  Note:  Be sure to initialize all declared STRING variables as needed
+         For example, in Function Main: struct.myString = "";
+*******************************************************************************************/
+// STRUCTURE MyStruct1
+// {
+// };
+
+// MyStruct1 struct;
+
+/*******************************************************************************************
+  Global Variables
+  (Uncomment and declare global variables as needed)
+  Note:  Be sure to initialize all declared STRING variables as needed
+         For example, in Function Main: myString = "";
+*******************************************************************************************/
+INTEGER zoneNum;
+STRING zone[3], presetName[20];
+
+/*******************************************************************************************
+  Functions
+  (Add any additional functions here)
+  Note:  Functions must be physically placed before the location in
+         the code that calls them.
+*******************************************************************************************/
+/*
+Function MyFunction1()
+{
+    // TODO:  Add local variable declarations here
+
+    // TODO:  Add code here
+}
+*/
+
+/*
+Integer_Function MyIntFunction1()
+{
+    // TODO:  Add local variable declarations here
+
+    // TODO:  Add code here
+
+    Return (0);
+}
+*/
+
+/*
+String_Function MyStrFunction1()
+{
+    // TODO:  Add local variable declarations here
+
+    // TODO:  Add code here
+
+    Return ("");
+}
+*/
+
+/*******************************************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+*******************************************************************************************/
+/*
+PUSH input
+{
+    // TODO:  Add code here
+}
+*/
+
+/*
+RELEASE input
+{
+    // TODO:  Add code here
+}
+*/
+
+
+CHANGE lutron_rx
+{
+	STRING temp_rx[20];
+	STRING whichLookA[2];
+	INTEGER whichLookI;
+	INTEGER i;
+	STRING junk[20];
+	
+	
+	temp_rx = lutron_rx;
+	if (FIND(":ss",temp_rx,1))
+	{
+		junk = remove (":ss ", temp_rx);
+		whichLookA = MID(temp_rx, zoneNum,1);
+		for (i = 1 to len(presetName))
+		{
+			if (whichLookA = MID(presetName, i,1)) whichLookI = i;
+		}
+			
+		if (issignaldefined(scene_fb[whichLookI])) PULSE (50,scene_fb[whichLookI]);
+	}
+}
+
+Change zone_init
+{
+	zone = zone_init;
+	zoneNum = ATOI(zone);
+	print ("%d\n",zoneNum);
+}	
+
+/*
+EVENT
+{
+    // TODO:  Add code here
+}
+*/
+
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+
+Function Main()
+{
+    presetName = "0123456789ABCDEFG";
+}
+
+

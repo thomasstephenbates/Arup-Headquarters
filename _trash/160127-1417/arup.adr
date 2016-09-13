@@ -1,0 +1,33 @@
+[Entries]
+RS 232=rs232 1,0,n,8,1,n,y
+Bayview (Medium)=tcp 10.162.63.5
+Bayview TP Gateway (Indirect)=Bayview (Medium):cresnet 2F
+Bayview TP=tcp 10.162.63.8
+Bayview TP Gateway=tcp 10.162.63.6
+Twin Peaks (Large)=tcp 10.162.63.9
+Twin Peaks TP=tcp 10.162.63.12
+Twin Peaks TP Gateway=tcp 10.162.63.10
+Reality Room=tcp 10.162.63.13
+Reality Room TP=tcp 10.162.63.15
+Reality Room TP Gateway=tcp 10.162.63.14
+Boardroom=tcp 10.162.63.1
+Boardroom TP=tcp 10.162.63.2
+
+[Settings]
+DefaultEntry=
+
+[Comments]
+RS 232=
+Bayview (Medium)=
+Bayview TP Gateway (Indirect)=
+Bayview TP=
+Bayview TP Gateway=
+Twin Peaks (Large)=
+Twin Peaks TP=
+Twin Peaks TP Gateway=
+Reality Room=
+Reality Room TP=
+Reality Room TP Gateway=
+Boardroom=
+Boardroom TP=
+

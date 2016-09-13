@@ -1,0 +1,8 @@
+Calling ProjMgr.CompileTargets() for Z:\Documents\work\ARUP\Crestron\programs\BiAmp AudiaFlex Command Processor v7.0.usp
+Returned from ProjMgr.CompileTargets() for <Z:\Documents\work\ARUP\Crestron\programs\BiAmp AudiaFlex Command Processor v7.0.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for Z:\Documents\work\ARUP\Crestron\programs\Biamp Level Processor v7.0.usp
+Returned from ProjMgr.CompileTargets() for <Z:\Documents\work\ARUP\Crestron\programs\Biamp Level Processor v7.0.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for Z:\Documents\work\ARUP\Crestron\programs\Biamp On-Off Processor v7.0.usp
+Returned from ProjMgr.CompileTargets() for <Z:\Documents\work\ARUP\Crestron\programs\Biamp On-Off Processor v7.0.usp>: Result: 0
+Calling ProjMgr.LinkTargets()...
+Returned from ProjMgr.LinkTargets(): Result: 0

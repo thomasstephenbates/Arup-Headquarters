@@ -1,0 +1,402 @@
+/***********************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+***********************************************************************************/
+/*
+Dealer Name:	Crestron Electronics
+System Name:
+System Number:
+Programmer:		PAC
+Comments:
+*/
+/***********************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+***********************************************************************************/
+#SYMBOL_NAME "Panasonic Plasma Ramp Drive"
+// #HINT ""
+#DEFINE_CONSTANT	ciMAXVOLUME			63
+#DEFINE_CONSTANT	ciMAXPICTURE		60
+#DEFINE_CONSTANT	ciMAXTINT				60
+#DEFINE_CONSTANT	ciMAXCOLOR			60
+#DEFINE_CONSTANT	ciMAXBRIGHT			60
+#DEFINE_CONSTANT	ciMAXSHARP			30
+
+#DEFINE_CONSTANT	ciRAMPDONE			8888
+#DEFINE_CONSTANT	ciCLEAR					9999
+
+#DEFINE_CONSTANT	ciPICTUREOFFSET	30
+#DEFINE_CONSTANT	ciTINTOFFSET		30
+#DEFINE_CONSTANT	ciCOLOROFFSET		30
+#DEFINE_CONSTANT	ciBRIGHTOFFSET	30
+#DEFINE_CONSTANT	ciSHARPOFFSET		15
+
+#DEFINE_CONSTANT	csVOLUME				"AVL:"
+#DEFINE_CONSTANT	csPICTURE				"VPC:PIC"
+#DEFINE_CONSTANT	csTINT					"VPC:TIN"
+#DEFINE_CONSTANT	csCOLOR					"VPC:COL"
+#DEFINE_CONSTANT	csBRIGHT				"VPC:BLK"
+#DEFINE_CONSTANT	csSHARP					"VPC:SHP"
+
+#DEFINE_CONSTANT	csVOLUMESTATE		"QAV:"
+#DEFINE_CONSTANT	csPICTURESTATE	"QPC:PIC"
+#DEFINE_CONSTANT	csTINTSTATE			"QPC:TIN"
+#DEFINE_CONSTANT	csCOLORSTATE		"QPC:COL"
+#DEFINE_CONSTANT	csBRIGHTSTATE		"QPC:BLK"
+#DEFINE_CONSTANT	csSHARPSTATE		"QPC:SHP"
+
+#DEFINE_CONSTANT	csENDCHAR				"\x03"
+
+// #CATEGORY "" 
+#CATEGORY "24" // TV/Video Projector
+#DEFAULT_VOLATILE
+// #DEFAULT_NONVOLATILE
+/*
+#HELP_BEGIN
+   (add additional lines of help lines)
+#HELP_END
+*/
+/***********************************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+***********************************************************************************/
+DIGITAL_INPUT	Volume_Up, Volume_Down,
+							Brightness_Up, Brightness_Down,
+							Sharpness_Up, Sharpness_Down,
+							Picture_Up, Picture_Down,
+							Tint_Up, Tint_Down,
+							Color_UP, Color_Down;
+// ANALOG_INPUT
+// STRING_INPUT 
+BUFFER_INPUT	From_Device$[500];
+
+// DIGITAL_OUTPUT 
+ANALOG_OUTPUT	Ramping_Done, Volume_Out, Brightness_Out, Sharpness_Out, Picture_Out,
+							Tint_Out, Color_Out;
+STRING_OUTPUT	To_Device$;
+/***********************************************************************************
+  Global Variables
+  (Uncomment and declare global variables as needed)
+  Note:  Be sure to initialize all declared STRING variables as needed
+         For example, in Function Main: myString = "";
+***********************************************************************************/
+INTEGER	iVolume, iBright, iSharp, iPicture, iTint, iColor, iTemp, iFlag1;
+STRING	sTemp[25];
+/***********************************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+***********************************************************************************/
+PUSH Volume_Up
+{
+	if(iVolume < ciMAXVOLUME)
+	{
+		iVolume = iVolume + 1;
+		makestring(To_Device$, "\x02%s%02u\x03", csVOLUME, iVolume);
+		Volume_Out = iVolume;
+	}
+	if(iVolume = ciMAXVOLUME)
+	{
+		Ramping_Done = ciRAMPDONE;
+		delay(1);
+		Ramping_Done = ciCLEAR;
+	}
+}
+
+PUSH Volume_Down
+{
+	if(iVolume > 0)
+	{
+		iVolume = iVolume - 1;
+		makestring(To_Device$, "\x02%s%02u\x03", csVOLUME, iVolume);
+		Volume_Out = iVolume;
+	}
+	if(iVolume = 0)
+	{
+		Ramping_Done = ciRAMPDONE;
+		delay(1);
+		Ramping_Done = ciCLEAR;
+	}
+}
+
+PUSH Brightness_Up
+{
+	if(iBright < ciMAXBRIGHT)
+	{
+		iBright = iBright + 1;
+		makestring(To_Device$, "\x02%s%03d\x03", csBRIGHT, iBright - ciBRIGHTOFFSET);
+		Brightness_Out = iBright;
+	}
+	if(iBright = ciMAXBRIGHT)
+	{
+		Ramping_Done = ciRAMPDONE;
+		delay(1);
+		Ramping_Done = ciCLEAR;
+	}
+}
+
+PUSH Brightness_Down
+{
+	if(iBright > 0)
+	{
+		iBright = iBright - 1;
+		makestring(To_Device$, "\x02%s%03d\x03", csBRIGHT, iBright - ciBRIGHTOFFSET);
+		Brightness_Out = iBright;
+	}
+	if(iBright = 0)
+	{
+		Ramping_Done = ciRAMPDONE;
+		delay(1);
+		Ramping_Done = ciCLEAR;
+	}
+}
+
+PUSH Sharpness_Up
+{
+	if(iSharp < ciMAXSHARP)
+	{
+		iSharp = iSharp + 1;
+		makestring(To_Device$, "\x02%s%03d\x03", csSHARP, iSharp - ciSHARPOFFSET);
+		Sharpness_Out = iSharp;
+	}
+	if(iSharp = ciMAXSHARP)
+	{
+		Ramping_Done = ciRAMPDONE;
+		delay(1);
+		Ramping_Done = ciCLEAR;
+	}
+}
+
+PUSH Sharpness_Down
+{
+	if(iSharp > 0)
+	{
+		iSharp = iSharp - 1;
+		makestring(To_Device$, "\x02%s%03d\x03", csSHARP, iSharp - ciSHARPOFFSET);
+		Sharpness_Out = iSharp;
+	}
+	if(iSharp = 0)
+	{
+		Ramping_Done = ciRAMPDONE;
+		delay(1);
+		Ramping_Done = ciCLEAR;
+	}
+}
+
+PUSH Picture_Up
+{
+	if(iPicture < ciMAXPICTURE)
+	{
+		iPicture = iPicture + 1;
+		makestring(To_Device$, "\x02%s%03d\x03", csPICTURE, iPicture - ciPICTUREOFFSET);
+		Picture_Out = iPicture;
+	}
+	if(iPicture = ciMAXPICTURE)
+	{
+		Ramping_Done = ciRAMPDONE;
+		delay(1);
+		Ramping_Done = ciCLEAR;
+	}
+}
+
+PUSH Picture_Down
+{
+	if(iPicture > 0)
+	{
+		iPicture = iPicture - 1;
+		makestring(To_Device$, "\x02%s%03d\x03", csPICTURE, iPicture - ciPICTUREOFFSET);
+		Picture_Out = iPicture;
+	}
+	if(iPicture = 0)
+	{
+		Ramping_Done = ciRAMPDONE;
+		delay(1);
+		Ramping_Done = ciCLEAR;
+	}
+}
+
+PUSH Tint_Up
+{
+	if(iTint < ciMAXTINT)
+	{
+		iTint = iTint + 1;
+		makestring(To_Device$, "\x02%s%03d\x03", csTINT, iTint - ciTINTOFFSET);
+		Tint_Out = iTint;
+	}
+	if(iTint = ciMAXTINT)
+	{
+		Ramping_Done = ciRAMPDONE;
+		delay(1);
+		Ramping_Done = ciCLEAR;
+	}
+}
+
+PUSH Tint_Down
+{
+	if(iTint > 0)
+	{
+		iTint = iTint - 1;
+		makestring(To_Device$, "\x02%s%03d\x03", csTINT, iTint - ciTINTOFFSET);
+		Tint_Out = iTint;
+	}
+	if(iTint = 0)
+	{
+		Ramping_Done = ciRAMPDONE;
+		delay(1);
+		Ramping_Done = ciCLEAR;
+	}
+}
+
+PUSH Color_Up
+{
+	if(iColor < ciMAXCOLOR)
+	{
+		iColor = iColor + 1;
+		makestring(To_Device$, "\x02%s%03d\x03", csCOLOR, iColor - ciCOLOROFFSET);
+		Color_Out = iColor;
+	}
+	if(iColor = ciMAXCOLOR)
+	{
+		Ramping_Done = ciRAMPDONE;
+		delay(1);
+		Ramping_Done = ciCLEAR;
+	}
+}
+
+PUSH Color_Down
+{
+	if(iColor > 0)
+	{
+		iColor = iColor - 1;
+		makestring(To_Device$, "\x02%s%03d\x03", csCOLOR, iColor - ciCOLOROFFSET);
+		Color_Out = iColor;
+	}
+	if(iColor = 0)
+	{
+		Ramping_Done = ciRAMPDONE;
+		delay(1);
+		Ramping_Done = ciCLEAR;
+	}
+}
+
+CHANGE From_Device$
+{
+	if(iFlag1 = 0)
+	{
+		iFlag1 = 1;
+		while(find(csENDCHAR, From_Device$) > 0)
+		{
+			sTemp = remove(csENDCHAR, From_Device$);
+			if(find(csVOLUMESTATE, sTemp) > 0)
+			{
+				iTemp = atoi(sTemp);
+				if(iTemp <> iVolume)
+				{
+					iVolume = iTemp;
+					Volume_Out = iVolume;
+				}
+			}
+			else if(find(csBRIGHTSTATE, sTemp) > 0)
+			{
+				iTemp = atoi(sTemp);
+				if(find("-", sTemp) > 0)
+				{
+					iTemp = ciBRIGHTOFFSET - iTemp;
+				}
+				else
+				{
+					iTemp = iTemp + ciBRIGHTOFFSET;
+				}
+				if(iTemp <> iBright)
+				{
+					iBright = iTemp;
+					Brightness_Out = iBright;
+				}
+			}
+			else if(find(csSHARPSTATE, sTemp) > 0)
+			{
+				iTemp = atoi(sTemp);
+				if(find("-", sTemp) > 0)
+				{
+					iTemp = ciSHARPOFFSET - iTemp;
+				}
+				else
+				{
+					iTemp = iTemp + ciSHARPOFFSET;
+				}
+				if(iTemp <> iSharp)
+				{
+					iSharp = iTemp;
+					Sharpness_Out = iSharp;
+				}
+			}
+			else if(find(csPICTURESTATE, sTemp) > 0)
+			{
+				iTemp = atoi(sTemp);
+				if(find("-", sTemp) > 0)
+				{
+					iTemp = ciPICTUREOFFSET - iTemp;
+				}
+				else
+				{
+					iTemp = iTemp + ciPICTUREOFFSET;
+				}
+				if(iTemp <> iPicture)
+				{
+					iPicture = iTemp;
+					Picture_Out = iPicture;
+				}
+			}
+			else if(find(csTINTSTATE, sTemp) > 0)
+			{
+				iTemp = atoi(sTemp);
+				if(find("-", sTemp) > 0)
+				{
+					iTemp = ciTINTOFFSET - iTemp;
+				}
+				else
+				{
+					iTemp = iTemp + ciTINTOFFSET;
+				}
+				if(iTemp <> iTint)
+				{
+					iTint = iTemp;
+					Tint_Out = iTint;
+				}
+			}
+			else if(find(csCOLORSTATE, sTemp) > 0)
+			{
+				iTemp = atoi(sTemp);
+				if(find("-", sTemp) > 0)
+				{
+					iTemp = ciCOLOROFFSET - iTemp;
+				}
+				else
+				{
+					iTemp = iTemp + ciCOLOROFFSET;
+				}
+				if(iTemp <> iColor)
+				{
+					iColor = iTemp;
+					Color_Out = iColor;
+				}
+			}
+		}
+		iFlag1 = 0;
+	}
+}
+/***********************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+***********************************************************************************/
+Function Main()
+{
+	iVolume = 0;
+	iBright = 0;
+	iSharp = 0;
+	iPicture = 0;
+	iTint = 0;
+	iColor = 0;
+	iTemp = 0;
+	iFlag1 = 0;
+}

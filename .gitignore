@@ -1,0 +1,22 @@
+# vtPro-e generated
+*.sgd
+*.sgd2
+*.sgd_
+*.vtp.ASV
+*.vtz
+*.vtz.hash
+*.Core3/
+
+# Simpl Window generated
+*.umc.ASV
+*.um2
+*.bak
+*.lpz
+*.sig
+*.sm2
+*.smw.ASV
+*.compiled.zip
+SPlsWork/
+
+*.hash
+*.ASV

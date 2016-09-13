@@ -1,0 +1,18 @@
+Calling ProjMgr.CompileTargets() for X:\Documents\work\ARUP\Crestron\programs\dialing keypad+.usp
+Returned from ProjMgr.CompileTargets() for <X:\Documents\work\ARUP\Crestron\programs\dialing keypad+.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for X:\Documents\work\ARUP\Crestron\programs\compareString+.usp
+Returned from ProjMgr.CompileTargets() for <X:\Documents\work\ARUP\Crestron\programs\compareString+.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for X:\Documents\work\ARUP\Crestron\programs\BiAmp AudiaFlex Command Processor v7.0.usp
+Returned from ProjMgr.CompileTargets() for <X:\Documents\work\ARUP\Crestron\programs\BiAmp AudiaFlex Command Processor v7.0.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for X:\Documents\work\ARUP\Crestron\programs\Biamp Level Processor v7.0.usp
+Returned from ProjMgr.CompileTargets() for <X:\Documents\work\ARUP\Crestron\programs\Biamp Level Processor v7.0.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for X:\Documents\work\ARUP\Crestron\programs\Biamp On-Off Processor v7.0.usp
+Returned from ProjMgr.CompileTargets() for <X:\Documents\work\ARUP\Crestron\programs\Biamp On-Off Processor v7.0.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for AlarmClockProcessor v1.0.csp
+Returned from ProjMgr.CompileTargets() for <AlarmClockProcessor v1.0.csp>: Result: 0
+Calling ProjMgr.CompileTargets() for X:\Documents\work\ARUP\Crestron\programs\mil_to_standard_time.usp
+Returned from ProjMgr.CompileTargets() for <X:\Documents\work\ARUP\Crestron\programs\mil_to_standard_time.usp>: Result: 0
+Calling ProjMgr.CompileTargets() for X:\Documents\work\ARUP\Crestron\programs\lutron+.usp
+Returned from ProjMgr.CompileTargets() for <X:\Documents\work\ARUP\Crestron\programs\lutron+.usp>: Result: 0
+Calling ProjMgr.LinkTargets()...
+Returned from ProjMgr.LinkTargets(): Result: 0
