@@ -11,13 +11,14 @@ Version=1.0
 DefaultEntry=
 
 [ComSpecs]
+Sunset DM 8x8=auto 10.162.63.36
 Sunset TP=auto 10.162.63.34
 Sunset=auto 10.162.63.31
 Bayview (Medium)=auto 10.162.63.5
 Bayview TP=auto 10.162.63.8
 Bayview TP Gateway=auto 10.162.63.6
 Twin Peaks (Large)=auto 10.162.63.9
-Twin Peaks TP=auto 10.162.63.12
+Twin Peaks TP=Twin Peaks TP Gateway:rf 11
 Twin Peaks TP Gateway=auto 10.162.63.10
 Reality Room=auto 10.162.63.13
 Reality Room TP=auto 10.162.63.15
@@ -26,6 +27,7 @@ Boardroom=auto 10.162.63.1
 Boardroom TP=auto 10.162.63.2
 
 [Notes]
+Sunset DM 8x8=
 Sunset TP=
 Sunset=
 Bayview (Medium)=

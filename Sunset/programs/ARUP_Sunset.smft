@@ -1,0 +1,7 @@
+<Device Model="AV2">
+   <Network Type="Ethernet" Id="08">
+      <Device Model="TPMC-8X" DeviceId="03"/>
+      <Device Model="DM-MD8x8" DeviceId="04"/>
+   </Network>
+   <Network Type="Cresnet" Id="09"/>
+</Device>

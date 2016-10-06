@@ -1,0 +1,10 @@
+<Device Model="AV2">
+   <Network Type="Ethernet" Id="08">
+      <Device Model="CEN-HPRFGW (Ethernet)" DeviceId="0F" Name="TP Gateway">
+         <Network Type="RF">
+            <Device Model="TPS-6X (RF)" DeviceId="03" Name="Touchpanel"/>
+         </Network>
+      </Device>
+   </Network>
+   <Network Type="Cresnet" Id="09"/>
+</Device>
